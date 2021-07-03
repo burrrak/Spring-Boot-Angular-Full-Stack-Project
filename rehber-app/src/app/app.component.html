@@ -1,0 +1,162 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <b class="navbar-brand" style="color:white;">Kisi Listesi Uygulaması</b>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" (click)="onOpenModal (null, 'add')">Kisi Ekle <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input type="search" (ngModelChange)="searchKisiler(key.value)" #key="ngModel" ngModel
+             name="key" id="searchAdi" class="form-control mr-sm-2" placeholder="Kisi Ara..." required>
+    </form>
+  </div>
+</nav>
+
+<div class="container" id="main-container">
+  <div class="row">
+    <div *ngFor="let kisi of kisiler" class="col-md-6 col-xl-3">
+      <div class="card m-b-30">
+        <div class="card-body row">
+          <div class="col-4">
+
+          </div>
+          <div class="text-center">
+            <h5>{{kisi?.adi}}</h5>
+            <h5>{{kisi?.soyadi}}</h5>
+            <p class="m-0">{{kisi?.meslek}}</p>
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><i class="fa fa-envelope float-right"></i>{{kisi?.email}}</li>
+          <li class="list-group-item"><i class="fa fa-phone float-right"></i>Telefon No : {{kisi?.telefon}}</li>
+        </ul>
+        <div class="card-body">
+          <div class="float-right btn-group btn-group-sm">
+            <a (click)="onOpenModal(kisi, 'edit')" class="btn btn-primary tooltips" data-placement="top" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+            <a (click)="onOpenModal(kisi, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kisi Ekleme Modal -->
+  <div class="modal fade" id="addKisiModal" tabindex="-1" role="dialog" aria-labelledby="addKisiModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addKisiModalLabel">Kisi Ekle</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #addForm="ngForm" (ngSubmit)="onAddKisi(addForm)">
+            <div class="form-group">
+              <label for="adi">Adi</label>
+              <input type="text" ngModel name="adi" class="form-control" id="adi" placeholder="Adi" required>
+            </div>
+            <div class="form-group">
+              <label for="soyadi">Soyadi</label>
+              <input type="text" ngModel name="soyadi" class="form-control" id="soyadi" placeholder="Soyadi" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" ngModel name="email" class="form-control" id="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+              <label for="meslek">Meslek</label>
+              <input type="text" ngModel name="meslek" class="form-control" id="meslek" placeholder="Meslek" required>
+            </div>
+            <div class="form-group">
+              <label for="telefon">Telefon</label>
+              <input type="number" ngModel name="telefon" class="form-control" id="telefon" placeholder="Telefon" required>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" id="add-kisi-form" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+              <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Kaydet</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Duzenleme Modal -->
+  <div class="modal fade" id="updateKisiModal" tabindex="-1" role="dialog" aria-labelledby="kisiEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateKisiModalLabel">Kisi Duzenle {{editKisi?.adi}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #editForm="ngForm">
+            <div class="form-group">
+              <label for="adi">Adi</label>
+              <input type="text" ngModel="{{editKisi?.adi}}" name="adi" class="form-control" id="_adi" aria-describedby="emailHelp" placeholder="Adi">
+            </div>
+            <input type="hidden" ngModel="{{editKisi?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+            <div class="form-group">
+              <label for="soyadi">Soyadi</label>
+              <input type="text" ngModel="{{editKisi?.soyadi}}" name="soyadi" class="form-control" id="_soyadi" placeholder="Soyadi">
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="text" ngModel="{{editKisi?.email}}" name="email" class="form-control" id="_email" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <label for="meslek">Meslek</label>
+              <input type="text" ngModel="{{editKisi?.meslek}}" name="meslek" class="form-control" id="_meslek" placeholder="Meslek">
+            </div>
+            <div class="form-group">
+              <label for="telefon">Telefon</label>
+              <input type="number" ngModel="{{editKisi?.telefon}}" name="telefon" class="form-control" id="phone" id="_telefon" placeholder="Telefon">
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Kapat</button>
+              <button (click)="onUpdateKisi(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Kaydet</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Silme Modal -->
+  <div class="modal fade" id="deleteKisiModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModelLabel">Kişiyi Sil</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bu Kisiyi Silmek İstediğinize Emin misiniz? ?</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hayır</button>
+            <button (click)="onDeleteKisi(deleteKisi?.id)" class="btn btn-danger" data-dismiss="modal">Evet</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Kisi Yok Notu -->
+<div *ngIf="kisiler?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+  <div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">KİSİ YOK!</h4>
+    <p>Kisi Bulunamadi.</p>
+  </div>
+</div>
